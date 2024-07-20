@@ -12,9 +12,6 @@ build/
 dist/
 *.egg-info/
 
-# Database
-user_data.db
-
 # Jupyter Notebook
 .ipynb_checkpoints
 
