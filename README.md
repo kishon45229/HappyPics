@@ -20,7 +20,7 @@ HappyPics is a Streamlit web application that uses facial emotion detection to a
 - Matplotlib
   
 ## Deployment:
-The app is deployed on Streamlit Community Cloud and can be accessed here.
+The app is deployed on Streamlit Community Cloud and can be accessed [here](https://happypics-qtrplvnyyzzdtbeboj7kks.streamlit.app/).
 
 ## Usage:
 1. Sign in with your email and password to start analyzing images.
