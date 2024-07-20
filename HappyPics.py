@@ -11,10 +11,10 @@ import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 import os
 
-# Load environment variables
+#Load environment variables
 load_dotenv()
 
-# Firebase configuration
+#Firebase configuration for login and signup
 firebase_config = {
     "apiKey": os.getenv("API_KEY"),
     "authDomain": os.getenv("AUTH_DOMAIN"),
@@ -25,15 +25,16 @@ firebase_config = {
     "appId": os.getenv("APP_ID")
 }
 
+#Initilize Firebase
 firebase = pyrebase.initialize_app(firebase_config)
 auth = firebase.auth()
 
-# Database Configuration
+#Database Configuration
 DATABASE_URL = "sqlite:///user_data.db"
 engine = create_engine(DATABASE_URL)
 metadata = MetaData()
 
-# Table to store the history of the images the user shared with HappyPics
+#Table to store the history of the images the user shared with HappyPics
 user_history_table = Table(
     'user_history', metadata,
     Column('id', Integer, primary_key=True),
@@ -43,12 +44,12 @@ user_history_table = Table(
     Column('score', Float, nullable=False)
 )
 
-# To create tables
+#To create tables
 metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-# Function to save the analysis result to history
+#Function to save the analysis result to history
 def save_to_history(email, image, emotion, score):
     try:
         buffered = BytesIO()
@@ -60,7 +61,7 @@ def save_to_history(email, image, emotion, score):
     except Exception as e:
         st.error(f"Error saving to history: {str(e)}")
 
-# Function to retrieve user history from the database
+#Function to retrieve user history from the database
 def get_user_history(email):
     try:
         query = user_history_table.select().where(user_history_table.c.email == email).order_by(desc(user_history_table.c.id))
@@ -77,7 +78,7 @@ def get_user_history(email):
         st.error(f"Error retrieving user history: {str(e)}")
         return []
 
-# Function to clear user history from the database
+#Function to clear user history from the database
 def clear_user_history(email):
     try:
         delete_query = user_history_table.delete().where(user_history_table.c.email == email)
@@ -88,7 +89,7 @@ def clear_user_history(email):
     except Exception as e:
         st.error(f"Error clearing history: {str(e)}")
 
-# Function to show graph emotion confidence over time
+#Function to show graph emotion confidence over time
 def plot_emotion_confidence_over_time(history):
     if history:
         timestamps = list(range(1, len(history) + 1))
@@ -105,7 +106,7 @@ def plot_emotion_confidence_over_time(history):
         
         st.pyplot(fig)
 
-# Function to show graph emotion proportions
+#Function to show graph emotion proportions
 def plot_emotion_proportions(history):
     if history:
         emotions = [record['emotion'] for record in history]
@@ -118,7 +119,7 @@ def plot_emotion_proportions(history):
         
         st.pyplot(fig)
 
-# Function to show graph emotion score trends
+#Function to show graph emotion score trends
 def plot_emotion_score_trends(history):
     if history:
         timestamps = list(range(1, len(history) + 1))
@@ -141,7 +142,7 @@ def plot_emotion_score_trends(history):
         
         st.pyplot(fig)
 
-# Function to handle sentiment analysis process for images
+#Function to handle sentiment analysis process for images
 def sentiment_analysis():
     st.title("HappyPics")
     st.subheader("Discover your sentiments together!")
@@ -166,7 +167,7 @@ def sentiment_analysis():
                 st.warning("No face detected or unable to detect emotions")
         except Exception as e:
             st.error(f"Error processing the image: {str(e)}")
-    # Sidebar username and logout button
+    #Sidebar username and logout button
     st.sidebar.title(f"Hi, {st.session_state['user_info']['email']}")
 
     if st.sidebar.button("Logout", type="primary"):
@@ -179,7 +180,7 @@ def sentiment_analysis():
     if 'user_info' in st.session_state:
         history = get_user_history(st.session_state['user_info']['email'])
         if history:
-            # Sidebar graph view options
+            #Sidebar graph view options
             st.sidebar.subheader("Graph Options")
             if 'show_confidence' not in st.session_state:
                 st.session_state['show_confidence'] = False
@@ -206,7 +207,7 @@ def sentiment_analysis():
             else:
                 st.session_state['show_trends'] = False
             
-            # Sidebar user history section
+            #Sidebar user history section
             st.sidebar.subheader("""________________________________""")
             st.sidebar.subheader("Your History")
             if st.sidebar.button("Clear History", type="primary"):
@@ -218,7 +219,7 @@ def sentiment_analysis():
         else:
             st.sidebar.write("No history yet")
 
-# Function to handle Firebase Authentication
+#Function to handle Firebase Authentication
 def handle_firebase_auth():
     st.subheader("Sign in to explore your emotions with just a single picture!")
 
@@ -251,7 +252,7 @@ def handle_firebase_auth():
     if 'login_error' in st.session_state and st.session_state['login_error']:
         st.error(st.session_state['login_error'])
 
-# Main logic with session
+#Main logic with session
 if 'authenticated' not in st.session_state:
     st.session_state['authenticated'] = False
 
