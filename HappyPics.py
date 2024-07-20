@@ -237,7 +237,7 @@ def handle_firebase_auth():
             st.session_state['user_info'] = user
             st.session_state['login_error'] = None
             st.success("Logged in successfully!")
-            st.experimental_rerun()
+            st.rerun()
         except Exception as e:
             st.session_state['login_error'] = "Invalid credentials or error occurred. Please try again."
 
