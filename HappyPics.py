@@ -134,7 +134,7 @@ def sentiment_analysis():
     display_history_in_sidebar()
 
     st.sidebar.title("Graph Options")
-    st.write("(Based on your history)")
+    st.sidebar.write("(Based on your history)")
     show_confidence_plot = st.sidebar.checkbox("Show Emotion Confidence Over Time", key='confidence_plot')
     show_proportion_plot = st.sidebar.checkbox("Show Emotion Proportions", key='proportion_plot')
     show_trend_plot = st.sidebar.checkbox("Show Emotion Score Trends", key='trend_plot')
